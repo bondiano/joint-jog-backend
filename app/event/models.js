@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const definition = {
     owner: {
@@ -16,6 +17,6 @@ const options = {
     timestamps: true
 };
 
-const eventSchema = new Schema(definition, options);
+const EventSchema = new Schema(definition, options);
 
-module.exports = mongoose.model('Event', eventSchema);
+module.exports = mongoose.model('Event', EventSchema);

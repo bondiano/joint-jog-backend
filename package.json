@@ -2,12 +2,15 @@
   "name": "joint-jog-backend",
   "version": "0.0.1",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "engines": {
     "node": ">=9.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
@@ -20,15 +23,20 @@
   },
   "homepage": "https://github.com/bondiano/joint-jog-backend#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "connect-mongo": "^2.0.1",
-    "cookie-session": "^2.0.0-beta.3",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.10",
+    "morgan": "^1.9.0",
     "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
