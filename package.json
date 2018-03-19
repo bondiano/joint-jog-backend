@@ -1,0 +1,37 @@
+{
+  "name": "joint-jog-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "engines": {
+    "node": ">=9.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bondiano/joint-jog-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bondiano/joint-jog-backend/issues"
+  },
+  "homepage": "https://github.com/bondiano/joint-jog-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-mongo": "^2.0.1",
+    "cookie-session": "^2.0.0-beta.3",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.10",
+    "passport": "^0.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "nodemon": "^1.17.2"
+  }
+}
