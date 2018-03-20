@@ -3,10 +3,8 @@
     "eslint:recommended"
   ],
   "env": {
-    "node": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 2017
+    "node": true,
+    "es6": true
   },
   "rules": {
     "quotes": 0,

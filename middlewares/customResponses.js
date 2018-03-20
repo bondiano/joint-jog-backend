@@ -1,3 +1,10 @@
+
+const extractValidationType = (errors) => {
+    const fields = Object.keys(errors);
+    return fields.map(key => errors[key])
+        .map(validation => ({errorOnField: validation.path, message: validation.message}));
+};
+
 const customResponses = {
     success(payload) {
         return this.status(200).json({
@@ -54,9 +61,3 @@ module.exports = (req, res, next) => {
     Object.assign(res, customResponses);
     next();
 };
-
-function extractValidationType(errors) {
-    const fields = Object.keys(errors);
-    return fields.map(key => errors[key])
-        .map(validation => ({errorOnField: validation.path, message: validation.message}));
-}

@@ -1,25 +1,49 @@
 const { Strategy: JWTStrategy, ExtractJwt } = require('passport-jwt');
+const { Strategy: LocalStrategy } = require('passport-local');
 
-// load up the user model
 const User = require('../app/user/model');
-const config = require('../config'); // get db config file
+const config = require('./config');
 
 module.exports = (passport) => {
-
-    const opts = {};
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
-    opts.secretOrKey = config.secret;
-
-    passport.use(new JWTStrategy(opts, (jwt_payload, done) => {
-        User.findOne({id: jwt_payload.id}, (err, user) => {
-            if (err) {
-                return done(err, false);
+    passport.use(new LocalStrategy({session: false}, (username, password, done) => 
+        User.findOne({username})
+        .then(user => {
+            if (!user) {
+                return done(null, false, {
+                    message: 'Incorrect username or password.'
+                });
             }
-            if (user) {
-                done(null, user);
-            } else {
-                done(null, false);
+            return user.verifyPassword(password)
+            .then(isMatch => {
+                return done(null, user, {
+                    message: 'Logged In Successfully'
+                });
+            })
+            .catch(err => {
+                return done(null, false, {
+                    message: 'Incorrect username or password.'
+                });
+            });
+        })
+        .catch(err => {
+            return done(err);
+        })
+    ));
+
+    const optionsJWT = {};
+    optionsJWT.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    optionsJWT.secretOrKey = config.secret;
+
+    passport.use(new JWTStrategy(optionsJWT, (jwt_payload, done) =>
+        User.findOne({id: jwt_payload.id})
+        .then((user) => {
+            if (!user) {
+                return done(null, false);
             }
-        });
-    }));
+            return done(null, user);
+        })
+        .catch(err => {
+            return done(err);
+        })
+    ));
 };

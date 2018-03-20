@@ -1,21 +1,36 @@
 const mongoose = require('mongoose'),
+    uniqueValidator = require('mongoose-unique-validator'),
     bcrypt = require('bcrypt-nodejs');
+
+const validateEmail = require('../../utils/validateEmail');    
 const { Schema } = mongoose;
 
 const definition = {
     username: {
         type: String,
         unique: true,
-        required: true
+        validate: {
+            validator: (v) =>  v.length > 5,
+            message: '{VALUE} is not a valid username!'
+        },
+        required: [true, 'Username required']
     },
     password: {
         type: String,
-        required: true
+        validate: {
+            validator: (v) =>  v.length > 5,
+            message: '{VALUE} is not a valid password!'
+        },
+        required: [true, 'Password required']
     },
     email: {
         type: String,
         unique: true,
-        required: true
+        validate: {
+            validator: validateEmail,
+            message: '{VALUE} is not a valid email!'
+        },
+        required: [true, 'Email required']
     },
     subscribed: [Schema.Types.ObjectId]
 };
@@ -46,13 +61,16 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-UserSchema.methods.comparePassword = function (password, cb) {
-    bcrypt.compare(password, this.password, function (err, isMatch) {
+UserSchema.methods.verifyPassword = function (password, cb) {
+    return new Promise((resolve, reject) => bcrypt.compare(password, this.password, (err, isMatch) => {
         if (err) {
-            return cb(err);
+            return reject(err);
         }
-        cb(null, isMatch);
-    });
+
+        resolve(isMatch);
+    }));
 };
+
+UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', UserSchema);
