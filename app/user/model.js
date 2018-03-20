@@ -32,6 +32,7 @@ const definition = {
         },
         required: [true, 'Email required']
     },
+    token: String,
     subscribed: [Schema.Types.ObjectId]
 };
 
@@ -66,7 +67,6 @@ UserSchema.methods.verifyPassword = function (password, cb) {
         if (err) {
             return reject(err);
         }
-
         resolve(isMatch);
     }));
 };

@@ -1,7 +1,34 @@
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const {secret} = require('../../config/config');
+
 const User = require('./model');
 
 exports.login = (req, res) => {
-    res.json({ title: 'user' });    
+    passport.authenticate('local', {session: false}, (err, user, info) => {
+        if (err || !user) {
+            return res.status(400).json({
+                success: false,
+                message: info ? info.message : 'Login failed',
+                user: user
+            });
+        }
+
+        req.login(user, {session: false}, (err) => { 
+            if (err) {
+                return res.send(err);
+            }
+            const payload = {
+                id: user.id,
+                username: user.username
+            };
+            const token = jwt.sign(payload, secret);
+            User.findById(user.id)
+            .then(user => user.set({token: token}).save())
+            .then(() => res.success({user: payload, token}))
+            .catch(err => res.serverError());
+        });
+    })(req, res);
 };
 
 exports.register = (req, res) => {
@@ -50,14 +77,15 @@ exports.register = (req, res) => {
     });
 };
 
-exports.auth = (req, res) => {
-
-};
-
 exports.profile = (req, res) => {
-
 };
 
 exports.currentUser = (req, res) => {
-
+    const userInfo = {
+        id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+        subscribed: req.user.subscribed
+    };
+    return res.success(userInfo);
 };

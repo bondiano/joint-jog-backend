@@ -15,7 +15,7 @@ module.exports = (passport) => {
             }
             return user.verifyPassword(password)
             .then(isMatch => {
-                return done(null, user, {
+                done(null, user, {
                     message: 'Logged In Successfully'
                 });
             })
@@ -33,17 +33,21 @@ module.exports = (passport) => {
     const optionsJWT = {};
     optionsJWT.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     optionsJWT.secretOrKey = config.secret;
+    optionsJWT.passReqToCallback = true;
 
-    passport.use(new JWTStrategy(optionsJWT, (jwt_payload, done) =>
-        User.findOne({id: jwt_payload.id})
-        .then((user) => {
-            if (!user) {
+    passport.use(new JWTStrategy(optionsJWT, (req, jwt_payload, done) => {
+            console.log();
+        
+        User.findOne({_id: jwt_payload.id})
+        .then(user => {
+            if (!user || (req.headers.authorization !== `bearer ${user.token}`)) {
                 return done(null, false);
             }
             return done(null, user);
         })
         .catch(err => {
             return done(err);
-        })
+        });
+    }
     ));
 };
