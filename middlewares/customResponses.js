@@ -55,6 +55,17 @@ const customResponses = {
             error: 'server_error',
         });
     },
+
+    loginError(user, message) {
+        return this.status(400).json({
+            success: false,
+            error: 'login_error',
+            payload: {
+                message: message,
+                user: user
+            }
+        });
+    }
 };
 
 module.exports = (req, res, next) => {
