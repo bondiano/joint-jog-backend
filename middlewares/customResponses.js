@@ -49,10 +49,11 @@ const customResponses = {
         });
     },
 
-    serverError() {
+    serverError(payload) {
         return this.status(503).json({
             success: false,
             error: 'server_error',
+            payload
         });
     },
 

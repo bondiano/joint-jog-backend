@@ -75,6 +75,23 @@ exports.register = (req, res) => {
 };
 
 exports.profile = (req, res) => {
+    const username = req.params.username;
+    User.findOne({username})
+    .then(user => {
+        if (!user) {
+            return res.notFound();
+        }
+        const userInfo = {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            subscribed: user.subscribed
+        };
+        return res.success(userInfo);
+    })
+    .catch(err => {
+        return res.serverError(err);
+    });
 };
 
 exports.currentUser = (req, res) => {
