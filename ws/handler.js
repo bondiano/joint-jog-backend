@@ -6,7 +6,6 @@ const GLOBAL = 'global';
 const joinToRooms = async (io, client, data) => {
     try {
         const {subscribed} = await User.findById(data.id).select('subscribed');
-        console.log(subscribed);
         subscribed.forEach(event => {
             client.join(event);
         });
