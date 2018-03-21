@@ -28,12 +28,15 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(customResponses);
 
+const server = require('http').Server(app);
+const io = require('socket.io').listen(server);
+
 require('./config/mongoose')(app);
 require('./app')(app);
 require('./config/passport')(passport);
-require('./ws/index')(app);
+require('./ws/index')(io);
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
 

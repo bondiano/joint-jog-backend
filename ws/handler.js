@@ -4,11 +4,16 @@ const types = require('./types');
 const GLOBAL = 'global';
 
 const joinToRooms = async (io, client, data) => {
-    const userSubscribed = await User.findById(data.id).select('subscribed');
-    userSubscribed.forEach(event => {
-        client.join(event);
-    });
-    client.join(GLOBAL);
+    try {
+        const {subscribed} = await User.findById(data.id).select('subscribed');
+        console.log(subscribed);
+        subscribed.forEach(event => {
+            client.join(event);
+        });
+        client.join(GLOBAL);
+    } catch(err) {
+        console.log(err);
+    }
 };
 
 const newSubscriber = (io, client, data) => {
@@ -35,8 +40,7 @@ module.exports = (io) => {
     const onConnect = (client) => {
         console.log('Socket ID:', client.id);
 
-        client.on('action', (_data) => {
-            const data = JSON.parse(_data);
+        client.on('action', (data) => {
             switch(data.type) {
                 case(types.CONNECT):
                     return joinToRooms(io, client, data);
