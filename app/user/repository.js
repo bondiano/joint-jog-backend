@@ -6,8 +6,7 @@ const saveUser = (data, saveCb) => {
 };
 
 const editUser = (user, data, saveCb) => {
-    const currentUser = user;
-    // TODO: Make edit user by request parameters
+    user.set(data);
     return user.save(saveCb);
 };
 
@@ -15,9 +14,21 @@ const deleteUser = (user) => user.remove();
 
 const findUserByID = (id) => User.findById(id);
 
-const findUserByUsername = (username) => User.findOne({username});
+const findUserByUsername = (username) => User.findOne({username}).select({token: 0, password: 0, email: 0});
 
-const getUserPublicInfo = (user) => ({
+const findUsernamesById = (idArr) => User.where('_id').in(idArr).select('username');
+
+const addEventToUser = (user, eventId, saveCb) => {
+    user.subscribed = user.subscribed.concat(eventId);
+    return user.save(saveCb);
+};
+
+const removeEventFromUser = (user, eventId, saveCb) => {
+    user.subscribed = user.subscribed.filter(event => event !== eventId);
+    return user.save(saveCb);
+};
+
+const selectUserPublicInfo = (user) => ({
     id: user._id,
     username: user.username,
     email: user.email,
@@ -34,5 +45,9 @@ module.exports = {
     editUser,
     deleteUser,
     findUserByID,
-    findUserByUsername
+    findUserByUsername,
+    findUsernamesById,
+    selectUserPublicInfo,
+    addEventToUser,
+    removeEventFromUser
 };

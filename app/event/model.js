@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 const definition = {
@@ -33,5 +34,13 @@ const options = {
 };
 
 const EventSchema = new Schema(definition, options);
+
+EventSchema.pre('save', function (next) {
+    if (this.isModified('subscribers') && this.subscribers.length < 1) {
+        this.remove();
+    } else {
+        return next();
+    }
+});
 
 module.exports = mongoose.model('Event', EventSchema);

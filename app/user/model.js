@@ -21,6 +21,7 @@ const definition = {
             validator: (v) =>  v.length > 5,
             message: '{VALUE} is not a valid password!'
         },
+        select: false,
         required: [true, 'Password required']
     },
     email: {

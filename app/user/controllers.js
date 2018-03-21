@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const {secret} = require('../../config/config');
+const { secret } = require('../../config/config');
 
-const reprepository = require('./repository');
-const User = require('./model');
+const repository = require('./repository');
 
 exports.login = (req, res) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -21,7 +20,7 @@ exports.login = (req, res) => {
                 username: user.username
             };
             const token = jwt.sign(payload, secret);
-            reprepository.findUserByID(user.id)
+            repository.findUserByID(user.id)
             .then(user => user.set({token: token}).save())
             .then(() => res.success({user: payload, token}))
             .catch(err => res.serverError());
@@ -61,7 +60,7 @@ exports.register = (req, res) => {
         });
     }
 
-    reprepository.saveUser({
+    repository.saveUser({
         username,
         password,
         email
@@ -75,13 +74,12 @@ exports.register = (req, res) => {
 
 exports.profile = (req, res) => {
     const username = req.params.username;
-    reprepository.findUserByUsername(username)
+    repository.findUserByUsername(username)
     .then(user => {
         if (!user) {
             return res.notFound();
         }
-        const userInfo = reprepository.getUserPublicInfo(user);
-        return res.success(userInfo);
+        return res.success(user);
     })
     .catch(err => {
         return res.serverError(err);
@@ -89,12 +87,12 @@ exports.profile = (req, res) => {
 };
 
 exports.currentUser = (req, res) => {
-    const userInfo = reprepository.getUserPublicInfo(req.user);
+    const userInfo = repository.selectUserPublicInfo(req.user);
     return res.success(userInfo);
 };
 
 exports.editProfile = (req, res) => {
-    return reprepository.editUser(req.user, req.body, (err) => {
+    return repository.editUser(req.user, req.body, (err) => {
         if (err) {
             return res.validationError(err);
         }
