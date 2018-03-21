@@ -13,7 +13,6 @@ const express = require('express'),
 
 const config = require('./config/config');
 const customResponses = require('./middlewares/customResponses');
-
 const port = config.port;
 const app = express();
 
@@ -32,6 +31,7 @@ app.use(customResponses);
 require('./config/mongoose')(app);
 require('./app')(app);
 require('./config/passport')(passport);
+require('./ws/index')(app);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
