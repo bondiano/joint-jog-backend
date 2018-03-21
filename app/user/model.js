@@ -32,6 +32,20 @@ const definition = {
         },
         required: [true, 'Email required']
     },
+    socialNetworks: [{type: String, url: String}],
+    firstName: String,
+    lastName: String,
+    age: { 
+        type: Number, 
+        validate: {
+            validator: (v) => v > 13,
+            message: 'Age must be more then 14!'
+        },
+    },
+    sex: { 
+        type: String, 
+        enum: ['male', 'female'] 
+    },
     token: String,
     subscribed: [Schema.Types.ObjectId]
 };

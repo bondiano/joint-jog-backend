@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const {secret} = require('../../config/config');
 
+const reprepository = require('./repository');
 const User = require('./model');
 
 exports.login = (req, res) => {
@@ -20,7 +21,7 @@ exports.login = (req, res) => {
                 username: user.username
             };
             const token = jwt.sign(payload, secret);
-            User.findById(user.id)
+            reprepository.findUserByID(user.id)
             .then(user => user.set({token: token}).save())
             .then(() => res.success({user: payload, token}))
             .catch(err => res.serverError());
@@ -60,13 +61,11 @@ exports.register = (req, res) => {
         });
     }
 
-    const newUser = new User({
+    reprepository.saveUser({
         username,
         password,
         email
-    });
-
-    newUser.save(err => {
+    }, (err) => {
         if (err) {
             return res.validationError(err);
         }
@@ -76,17 +75,12 @@ exports.register = (req, res) => {
 
 exports.profile = (req, res) => {
     const username = req.params.username;
-    User.findOne({username})
+    reprepository.findUserByUsername(username)
     .then(user => {
         if (!user) {
             return res.notFound();
         }
-        const userInfo = {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            subscribed: user.subscribed
-        };
+        const userInfo = reprepository.getUserPublicInfo(user);
         return res.success(userInfo);
     })
     .catch(err => {
@@ -95,11 +89,15 @@ exports.profile = (req, res) => {
 };
 
 exports.currentUser = (req, res) => {
-    const userInfo = {
-        id: req.user._id,
-        username: req.user.username,
-        email: req.user.email,
-        subscribed: req.user.subscribed
-    };
+    const userInfo = reprepository.getUserPublicInfo(req.user);
     return res.success(userInfo);
+};
+
+exports.editProfile = (req, res) => {
+    return reprepository.editUser(req.user, req.body, (err) => {
+        if (err) {
+            return res.validationError(err);
+        }
+        return res.success({message: 'Successful edit profile'});
+    });
 };

@@ -18,4 +18,12 @@ router.post('/sub', passport.authenticate('jwt', { session: false}), controller.
 
 router.post('/unsub', passport.authenticate('jwt', { session: false}), controller.unsubscribe);
 
+/**
+ * Export a router with paths
+ * GET: /
+ * GET: /:id
+ * POST: /create
+ * POST: /sub
+ * POST: /unsub
+ */
 module.exports = router;
