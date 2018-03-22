@@ -1,6 +1,6 @@
 # Joint jog app backend repository
 
-Before run this site, make sure you have installed and running MongoDB, or you can use free mongodb free servises like [mlab](https://mlab.com/).
+Before run this site, make sure you have installed and running MongoDB, or you can use free mongodb free services like [mlab](https://mlab.com/).
 
 ## Step to run locally
 

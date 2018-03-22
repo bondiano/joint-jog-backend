@@ -39,7 +39,7 @@ const definition = {
         type: Number, 
         validate: {
             validator: (v) => v > 11,
-            message: 'Age must be more then 12!'
+            message: 'Age must be more then 11!'
         },
     },
     sex: { 
@@ -78,7 +78,6 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.verifyPassword = function (password, cb) {
     return new Promise((resolve, reject) => bcrypt.compare(password, this.password, (err, isMatch) => {
-        console.log('err', err, password, this);        
         if (err) {
             return reject(err);
         }

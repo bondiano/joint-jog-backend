@@ -6,6 +6,38 @@ const saveUser = (data, saveCb) => {
 };
 
 const editUser = (user, data, saveCb) => {
+    if (data.password) {
+        if (!data.check_password) {
+            return saveCb({errors: [{
+                path: 'password',
+                message: 'Require check_password field for change password'
+            }]});
+        }
+        return user.verifyPassword(data.check_password)
+        .then(data => {
+            if(!data) {
+                return saveCb({errors: [{
+                    path: 'password',
+                    message: 'check_password is not correct'
+                }]});
+            }
+            user.set(data);
+            return user.save(saveCb);
+        })
+        .catch(err => saveCb(err));
+    }
+    if (data.token) {
+        return saveCb({errors: [{
+            path: 'token',
+            message: 'You could not set token'
+        }]});
+    }
+    if (data.subscribed) {
+        return saveCb({errors: [{
+            path: 'token',
+            message: 'You could not set subscribed'
+        }]});
+    }
     user.set(data);
     return user.save(saveCb);
 };
