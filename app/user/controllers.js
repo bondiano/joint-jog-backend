@@ -6,6 +6,7 @@ const repository = require('./repository');
 
 exports.login = (req, res) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
+        
         if (err || !user) {
             return res.loginError(user, 
                 info ? info.message : 'Login failed');

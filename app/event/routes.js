@@ -22,6 +22,7 @@ router.post('/unsub', passport.authenticate('jwt', { session: false}), controlle
  * Export a router with paths
  * GET: /
  * GET: /:id
+ * PATCH: /:id
  * POST: /create
  * POST: /sub
  * POST: /unsub

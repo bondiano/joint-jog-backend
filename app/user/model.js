@@ -21,7 +21,6 @@ const definition = {
             validator: (v) =>  v.length > 3,
             message: '{VALUE} is not a valid password!'
         },
-        select: false,
         required: [true, 'Password required']
     },
     email: {
@@ -79,6 +78,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.verifyPassword = function (password, cb) {
     return new Promise((resolve, reject) => bcrypt.compare(password, this.password, (err, isMatch) => {
+        console.log('err', err, password, this);        
         if (err) {
             return reject(err);
         }
