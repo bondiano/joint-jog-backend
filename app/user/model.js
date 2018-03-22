@@ -10,15 +10,15 @@ const definition = {
         type: String,
         unique: true,
         validate: {
-            validator: (v) =>  v.length > 5,
-            message: '{VALUE} is not a valid username!'
+            validator: (v) =>  v.length > 5 && v.length < 32,
+            message: '{VALUE} is not a valid username! Must be > 5 and < 32'
         },
         required: [true, 'Username required']
     },
     password: {
         type: String,
         validate: {
-            validator: (v) =>  v.length > 5,
+            validator: (v) =>  v.length > 3,
             message: '{VALUE} is not a valid password!'
         },
         select: false,
@@ -39,8 +39,8 @@ const definition = {
     age: { 
         type: Number, 
         validate: {
-            validator: (v) => v > 13,
-            message: 'Age must be more then 14!'
+            validator: (v) => v > 11,
+            message: 'Age must be more then 12!'
         },
     },
     sex: { 
