@@ -3,6 +3,7 @@ const passport = require('passport');
 const { secret } = require('../../config/config');
 
 const repository = require('./repository');
+const eventRepository = require('../event/repository');
 
 exports.login = (req, res) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -75,20 +76,22 @@ exports.register = (req, res) => {
 exports.profile = (req, res) => {
     const username = req.params.username;
     repository.findUserByUsername(username)
-    .then(user => {
-        if (!user) {
+    .then(user_info => {
+        if (!user_info) {
             return res.notFound();
         }
-        return res.success(user);
+        return eventRepository.findEventsByID(user_info.subscribed)
+        .then(events =>  res.success({user_info, events}));
     })
     .catch(err => {
         return res.serverError(err);
     });
 };
 
-exports.currentUser = (req, res) => {
-    const userInfo = repository.selectUserPublicInfo(req.user);
-    return res.success(userInfo);
+exports.currentUser = async (req, res) => {
+    const user_info = await repository.selectUserPublicInfo(req.user);
+    const events = await eventRepository.findEventsByID(user_info.subscribed);
+    return res.success({user_info, events});
 };
 
 exports.editProfile = (req, res) => {

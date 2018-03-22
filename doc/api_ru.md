@@ -131,16 +131,30 @@
 {
     "success": true,
     "payload": {
-        "id": "ID пользователя",
-        "username": "имя пользователя",
-        "email": "u***7@mail.ru",
-        "subscribed": [
-            "ID пробежки",
-            "ID пробежки",
-            "ID пробежки",
-            "ID пробежки"
-        ],
-        "sex": "male"
+        "user_info": {
+            "id": "ID пользователя",
+            "username": "имя пользователя",
+            "email": "u***7@mail.ru",
+            "subscribed": [
+                "ID пробежки",
+                "ID пробежки",
+                "ID пробежки",
+                "ID пробежки"
+            ],
+            "sex": "male"
+        },
+        "events": [
+            {
+                "subscribers": [],
+                "points": [{"x":"x", "y":"y"}],
+                "_id": "ID пробежки",
+                "date": "2018-03-21T13:50:36.000Z",
+                "owner": "b***k",
+                "createdAt": "2018-03-21T13:56:45.971Z",
+                "updatedAt": "2018-03-21T13:56:45.971Z",
+                "__v": 0
+            }
+        ]
     }
 }
 ```
@@ -198,13 +212,27 @@
 {
     "success": true,
     "payload": {
-        "socialNetworks": [],
-        "subscribed": [],
-        "_id": "ID пользователя",
-        "username": "имя пользователя",
-        "createdAt": "2018-03-21T12:43:02.505Z",
-        "updatedAt": "2018-03-21T12:43:02.505Z",
-        "__v": 0
+        "user_info": {
+            "socialNetworks": [],
+            "subscribed": [],
+            "_id": "ID пользователя",
+            "username": "имя пользователя",
+            "createdAt": "2018-03-21T12:43:02.505Z",
+            "updatedAt": "2018-03-21T12:43:02.505Z",
+            "__v": 0
+        },
+        "events": [
+            {
+                "subscribers": [],
+                "points": [{"x":"x", "y":"y"}],
+                "_id": "ID пробежки",
+                "date": "2018-03-21T13:50:36.000Z",
+                "owner": "b***k",
+                "createdAt": "2018-03-21T13:56:45.971Z",
+                "updatedAt": "2018-03-21T13:56:45.971Z",
+                "__v": 0
+            }
+        ]
     }
 }
 ```
@@ -235,7 +263,7 @@
 /event/create
 ```
 
-Путь для получения пробежки по `id`.  
+Путь для создания новой пробежки.  
 **Метод**: POST  
 **Требуется JWT**: да
 

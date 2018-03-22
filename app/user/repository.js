@@ -16,9 +16,10 @@ const editUser = (user, data, saveCb) => {
         return user.verifyPassword(data.check_password)
         .then(data => {
             if(!data) {
-                return saveCb({errors: [{
-                    path: 'password',
-                    message: 'check_password is not correct'
+                return saveCb({
+                    errors: [{
+                        path: 'password',
+                        message: 'check_password is not correct'
                 }]});
             }
             user.set(data);
@@ -27,15 +28,17 @@ const editUser = (user, data, saveCb) => {
         .catch(err => saveCb(err));
     }
     if (data.token) {
-        return saveCb({errors: [{
-            path: 'token',
-            message: 'You could not set token'
+        return saveCb({
+            errors: [{
+                path: 'token',
+                message: 'You could not set token'
         }]});
     }
     if (data.subscribed) {
-        return saveCb({errors: [{
-            path: 'token',
-            message: 'You could not set subscribed'
+        return saveCb({
+            errors: [{
+                path: 'token',
+                message: 'You could not set subscribed'
         }]});
     }
     user.set(data);
@@ -60,17 +63,7 @@ const removeEventFromUser = (user, eventId, saveCb) => {
     return user.save(saveCb);
 };
 
-const selectUserPublicInfo = (user) => ({
-    id: user._id,
-    username: user.username,
-    email: user.email,
-    subscribed: user.subscribed,
-    social_network: user.socialNetwork,
-    first_name: user.firstName,
-    last_name: user.lastName,
-    age: user.age,
-    sex: user.sex
-});
+const selectUserPublicInfo = (user) => User.findById(user.id).select({token: 0, password: 0});
 
 module.exports = {
     saveUser,
