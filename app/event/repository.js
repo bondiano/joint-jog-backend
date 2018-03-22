@@ -16,7 +16,7 @@ const findEventByID = (id) => Event.findById(id);
 
 const findEventsByID = (idArr) => Event.where('_id').in(idArr);
 
-const findAllEvents = () => Event.find();
+const findAllEvents = () => Event.find().where('date').gte(new Date());
 
 const addUserToEvent = (event, user, saveCb) => {
     event.subscribers = event.subscribers.concat(user._id);
