@@ -37,8 +37,6 @@ module.exports = (passport) => {
     optionsJWT.passReqToCallback = true;
 
     passport.use(new JWTStrategy(optionsJWT, (req, jwt_payload, done) => {
-            console.log();
-        
         User.findOne({_id: jwt_payload.id})
         .then(user => {
             if (!user || (req.headers.authorization !== `bearer ${user.token}`)) {
