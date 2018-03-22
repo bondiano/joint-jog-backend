@@ -53,14 +53,16 @@ const findUserByUsername = (username) => User.findOne({username}).select({token:
 
 const findUsernamesById = (idArr) => User.where('_id').in(idArr).select('username');
 
-const addEventToUser = (user, eventId, saveCb) => {
-    user.subscribed = user.subscribed.concat(eventId);
-    return user.save(saveCb);
+const addEventToUser = async (user, eventId, saveCb) => {
+    const _user = await User.findById(user.id);
+    await _user.set('subscribed', user.subscribed.filter(event => !event.equals(eventId)).concat(eventId));
+    return _user.save(saveCb);
 };
 
-const removeEventFromUser = (user, eventId, saveCb) => {
-    user.subscribed = user.subscribed.filter(event => event !== eventId);
-    return user.save(saveCb);
+const removeEventFromUser = async (user, eventId, saveCb) => {
+    const _user = await User.findById(user.id);
+    await _user.set('subscribed', user.subscribed.filter(event => !event.equals(eventId)));
+    return _user.save(saveCb);
 };
 
 const selectUserPublicInfo = (user) => User.findById(user.id).select({token: 0, password: 0});

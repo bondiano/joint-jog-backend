@@ -47,7 +47,7 @@ const definition = {
         enum: ['male', 'female'] 
     },
     token: String,
-    subscribed: [Schema.Types.ObjectId]
+    subscribed: [{type:Schema.Types.ObjectId, ref: 'Event'}]
 };
 
 const options = {

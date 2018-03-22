@@ -7,7 +7,7 @@ const definition = {
         type: String,
         required: [true, 'Owner required']
     },
-    subscribers: [Schema.Types.ObjectId],
+    subscribers: [{type:Schema.Types.ObjectId, ref: 'User'}],
     points: [{ x: Number, y: Number }],
     title: {
         type: String,
@@ -38,6 +38,7 @@ const EventSchema = new Schema(definition, options);
 EventSchema.pre('save', function (next) {
     if (this.isModified('subscribers') && this.subscribers.length < 1) {
         this.remove();
+        return next();
     } else {
         return next();
     }

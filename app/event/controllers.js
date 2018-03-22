@@ -58,26 +58,36 @@ exports.getAll = (req, res) => {
 
 exports.getOne = (req, res) => {
     const eventId = req.params.id;
-    return repository.findEventByID(eventId).then((data) => {
-        if (!data) {
+    return repository.findEventByID(eventId).then((event) => {
+        if (!event) {
             return res.notFound();
         }
-        return res.success(data);
+        userRepository.findUsernamesById(event.subscribers)
+        .then(usernames => {
+            return res.success({event, usernames});
+        });
     }).catch((err) => {
         return res.unprocessableEntity(err);
     });
 };
 
-exports.edit = async (req, res) => {
+exports.edit = (req, res) => {
+    const id = req.params.id;
     const data = req.body;
-    const { id } = data;
-    const currentEvent = await repository.findEventByID(id);  
-    return repository.editEvent(currentEvent, data, (err) => {
-        if (err) {
-            return res.validationError(err);
+    return repository.findEventByID(id)
+    .then((event) => {
+        if (!event) {
+            return res.notFound();
         }
-        return res.success({message: 'Successful edit event'});
-    });
+        return repository.editEvent(event, data, (err) => {
+            if (err) {
+                return res.validationError(err);
+            }
+            return res.success({message: 'Successful edit event'});
+        });
+    }).catch((err) => {
+        return res.unprocessableEntity(err);
+    }); 
 };
 
 /**
@@ -110,9 +120,9 @@ exports.unsubscribe = async (req, res) => {
     const { id } = req.body;
     try {
         const currentEvent = await repository.findEventByID(id);
-        await repository.removeUserFromEvent(currentEvent, user);
         await userRepository.removeEventFromUser(user, currentEvent._id);
-        return res.success({message: 'Successful subscribe'});
+        await repository.removeUserFromEvent(currentEvent, user);
+        return res.success({message: 'Successful unsubscribe'});
     } catch(err) {
         return res.unprocessableEntity(err);        
     }

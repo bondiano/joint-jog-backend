@@ -247,6 +247,28 @@
 **Метод**: GET  
 **Требуется JWT**: нет
 
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": [
+        {
+            "subscribers": [
+                "ID пользователя"
+            ],
+            "points": [],
+            "_id": "ID пробежки",
+            "date": "2018-11-03T17:00:00.000Z",
+            "owner": "b***k",
+            "createdAt": "2018-03-22T13:05:32.220Z",
+            "updatedAt": "2018-03-22T13:05:32.220Z",
+            "__v": 0
+        }
+    ]
+}
+```
+
 ## GET event/:id
 
 ``` bash
@@ -257,6 +279,34 @@
 **Метод**: GET  
 **Требуется JWT**: нет
 
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": {
+        "event": {
+            "subscribers": [
+                "ID пользователя"
+            ],
+            "points": [],
+            "_id": "ID пробежки",
+            "date": "2018-11-03T17:00:00.000Z",
+            "owner": "b***k",
+            "createdAt": "2018-03-22T13:05:32.220Z",
+            "updatedAt": "2018-03-22T13:05:32.220Z",
+            "__v": 0
+        },
+        "usernames": [
+            {
+                "_id": "ID пользователя",
+                "username": "b***k"
+            }
+        ]
+    }
+}
+```
+
 ## POST event/create
 
 ``` bash
@@ -266,6 +316,27 @@
 Путь для создания новой пробежки.  
 **Метод**: POST  
 **Требуется JWT**: да
+**Ожидаемое тело запроса**:
+
+``` JSON
+{
+    "data": "js new Data() или UTC",
+    "points": [{"x":"x", "y":"y"}],
+    "title": "заголовок",
+    "describe": "описание"
+}
+```
+
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": {
+        "message": "Successful created new event"
+    }
+}
+```
 
 ## POST event/sub
 
@@ -277,6 +348,25 @@
 **Метод**: POST  
 **Требуется JWT**: да
 
+**Ожидаемое тело запроса**:
+
+``` JSON
+{
+    "id": "ID пробежки"
+}
+```
+
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": {
+        "message": "Successful subscribe"
+    }
+}
+```
+
 ## POST event/unsub
 
 ``` bash
@@ -287,16 +377,56 @@
 **Метод**: POST  
 **Требуется JWT**: да
 
+**Ожидаемое тело запроса**:
+
+``` JSON
+{
+    "id": "ID пробежки"
+}
+```
+
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": {
+        "message": "Successful unsubscribe"
+    }
+}
+```
+
 ## PATCH event/:id
 
 ``` bash
-/event/unsub
+/event/:id
 ```
 
 Изменить информацию о пробежке(доступно только для создателя).  
 **Метод**: PATCH  
 **Требуется JWT**: да
 
+**Ожидаемое тело запроса**:
+
+``` JSON
+{
+    "data": "js new Data() или UTC",
+    "points": [{"x":"x", "y":"y"}],
+    "title": "заголовок",
+    "describe": "описание"
+}
+```
+
+### Успешный ответ
+
+``` JSON
+{
+    "success": true,
+    "payload": {
+        "message": "Successful edit event"
+    }
+}
+```
 
 ## JWT
 

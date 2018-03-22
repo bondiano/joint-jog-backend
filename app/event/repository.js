@@ -5,7 +5,7 @@ const saveEvent = (data, saveCb) => {
     return event.save(saveCb);
 };
 
-const editEvent = async (event, data, saveCb) => {
+const editEvent = (event, data, saveCb) => {
     event.set(data);
     return event.save(saveCb);
 };
@@ -18,14 +18,16 @@ const findEventsByID = (idArr) => Event.where('_id').in(idArr);
 
 const findAllEvents = () => Event.find().where('date').gte(new Date());
 
-const addUserToEvent = (event, user, saveCb) => {
-    event.subscribers = event.subscribers.concat(user._id);
-    return event.save(saveCb);
+const addUserToEvent = async (event, user, saveCb) => {
+    const _event = await Event.findById(user.id);
+    await _event.set('subscribers', event.subscribers.filter(userId => !userId.equals(user.id)).concat(user._id));
+    return _event.save(saveCb);
 };
 
-const removeUserFromEvent = (event, user, saveCb) => {   
-    event.subscribers = event.subscribers.filter(userId => userId !== user._id);
-    return event.save(saveCb);
+const removeUserFromEvent = async (event, user, saveCb) => {
+    const _event = await Event.findById(event.id);
+    await _event.set('subscribers', event.subscribers.filter(userId => !userId.equals(user.id)));
+    return _event.save(saveCb);
 };
 
 module.exports = {
