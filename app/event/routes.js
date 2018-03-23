@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const authenticateMiddleware = require('../../middlewares/authenticateMiddleware');
 
 const router = express.Router();
 
@@ -10,13 +11,13 @@ router.get('/', controller.getAll);
 
 router.get('/:id', controller.getOne);
 
-router.patch('/:id', passport.authenticate('jwt', { session: false}), controller.edit);
+router.patch('/:id', authenticateMiddleware, controller.edit);
 
-router.post('/create', passport.authenticate('jwt', { session: false}), controller.create);
+router.post('/create', authenticateMiddleware, controller.create);
 
-router.post('/sub', passport.authenticate('jwt', { session: false}), controller.subscribe);
+router.post('/sub', authenticateMiddleware, controller.subscribe);
 
-router.post('/unsub', passport.authenticate('jwt', { session: false}), controller.unsubscribe);
+router.post('/unsub', authenticateMiddleware, controller.unsubscribe);
 
 /**
  * Export a router with paths

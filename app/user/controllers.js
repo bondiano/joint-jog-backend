@@ -5,6 +5,14 @@ const { secret } = require('../../config/config');
 const repository = require('./repository');
 const eventRepository = require('../event/repository');
 
+exports.tryWithJWT = (req, res) => {
+    const payload = {
+        id: req.user.id,
+        username: req.user.username
+    };
+    res.success(payload);
+};
+
 exports.login = (req, res) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err || !user) {
