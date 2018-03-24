@@ -15,7 +15,7 @@ const config = require('./config/config');
 const customResponses = require('./middlewares/customResponses');
 const port = config.port;
 const app = express();
-
+app.disable('etag');
 /**
  * App use middleware
  */
