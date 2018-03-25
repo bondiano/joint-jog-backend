@@ -8,7 +8,19 @@ const definition = {
         required: [true, 'Owner required']
     },
     subscribers: [{type:Schema.Types.ObjectId, ref: 'User'}],
-    points: [{ x: Number, y: Number }],
+    points: [
+        { 
+            latitude: {type: Number, required: [true, 'Owner required']}, 
+            longitude: {type: Number, required: [true, 'Owner required']}, 
+            title: {
+                type: String,
+                validate: {
+                    validator: (v) =>  v.length < 144,
+                    message: 'Title must be short then 144 symbols!'
+                }
+            }
+        }
+    ],
     title: {
         type: String,
         validate: {
