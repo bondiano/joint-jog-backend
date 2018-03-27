@@ -19,7 +19,7 @@ const findEventsByID = (idArr) => Event.where('_id').in(idArr);
 const findAllEvents = () => Event.find().where('date').gte(new Date());
 
 const addUserToEvent = async (event, user, saveCb) => {
-    const _event = await Event.findById(user.id);
+    const _event = await Event.findById(event.id);
     await _event.set('subscribers', event.subscribers.filter(userId => !userId.equals(user.id)).concat(user._id));
     return _event.save(saveCb);
 };
@@ -27,7 +27,7 @@ const addUserToEvent = async (event, user, saveCb) => {
 const removeUserFromEvent = async (event, user, saveCb) => {
     const _event = await Event.findById(event.id);
     await _event.set('subscribers', event.subscribers.filter(userId => !userId.equals(user.id)));
-    return _event.save(saveCb);
+    await _event.save();
 };
 
 module.exports = {

@@ -47,13 +47,4 @@ const options = {
 
 const EventSchema = new Schema(definition, options);
 
-EventSchema.pre('save', function (next) {
-    if (this.isModified('subscribers') && this.subscribers.length < 1) {
-        this.remove();
-        return next();
-    } else {
-        return next();
-    }
-});
-
 module.exports = mongoose.model('Event', EventSchema);
