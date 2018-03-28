@@ -28,6 +28,7 @@ const removeUserFromEvent = async (event, user, saveCb) => {
     const _event = await Event.findById(event.id);
     await _event.set('subscribers', event.subscribers.filter(userId => !userId.equals(user.id)));
     await _event.save();
+    await Event.find({ subscribers: { $exists: true, $size: 0}}).remove().exec();
 };
 
 module.exports = {
