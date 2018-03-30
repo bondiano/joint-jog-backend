@@ -32,7 +32,7 @@ const definition = {
         },
         required: [true, 'Email required']
     },
-    socialNetworks: [{type: String, url: String}],
+    socialNetworks: [],
     firstName: String,
     lastName: String,
     age: { 
